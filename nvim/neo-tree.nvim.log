@@ -1,0 +1,7 @@
+[WARN  Mon 28 Apr 2025 07:50:34 PM IST] ....nvim/lua/neo-tree/sources/filesystem/lib/fs_actions.lua:650: /home/mulaydm10/.config/nvim/lua/plugins/catpuccin.lua  already exists, canceling
+[INFO  Mon 28 Apr 2025 07:50:50 PM IST] ....nvim/lua/neo-tree/sources/filesystem/lib/fs_actions.lua:663: Renamed catppuccin.lua successfully
+[INFO  Mon 28 Apr 2025 08:10:08 PM IST] ...y/neo-tree.nvim/lua/neo-tree/sources/common/commands.lua:260: Cut lua to clipboard
+[INFO  Mon 28 Apr 2025 08:46:15 PM IST] ....nvim/lua/neo-tree/sources/filesystem/lib/fs_actions.lua:663: Renamed neo-tree.lua successfully
+[INFO  Wed 30 Apr 2025 05:07:40 PM IST] ....nvim/lua/neo-tree/sources/filesystem/lib/fs_actions.lua:663: Renamed vim-test.lua successfully
+[INFO  Wed 07 May 2025 09:54:00 PM IST] ....nvim/lua/neo-tree/sources/filesystem/lib/fs_actions.lua:663: Renamed titles.md successfully
+[WARN  Sat 10 May 2025 04:17:55 PM IST] ....nvim/lua/neo-tree/sources/filesystem/lib/fs_actions.lua:650: /home/mulaydm10/webflyx/secure/guilty_pleasures.md  already exists, canceling
