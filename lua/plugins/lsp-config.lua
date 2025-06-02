@@ -49,16 +49,12 @@ return {
       })
 
       -- C/C++
-      lspconfig.clangd.setup({
-        on_attach = function(client, bufnr)
-          client.server_capabilities.signatureHelpProvider = false
-          on_attach(client, bufnr)
-        end,
-        capabilities = capabilities,
-        root_dir = function()
-          return vim.fn.getcwd()
-        end,
-      })
+     lspconfig.clangd.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  root_dir = require("lspconfig.util").root_pattern("compile_commands.json", ".git"),
+})
+
     end,
   },
   {
