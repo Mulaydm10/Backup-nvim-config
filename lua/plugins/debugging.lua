@@ -67,6 +67,15 @@ return {
     require("dap").repl.open()
     require("dap").repl.send(cmd)
   end, { desc = "Inspect Memory at Address" })
+      vim.keymap.set("n", "<leader>dv", function()
+  local var = vim.fn.input("Variable name: ")
+  local cmd = "p &" .. var
+  require("dap").repl.open()
+  require("dap").repl.send(cmd)
+end, { desc = "Print Address of Variable" })
+
+
+
     end,
   },
 }
