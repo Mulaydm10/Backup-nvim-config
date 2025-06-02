@@ -61,6 +61,12 @@ return {
       vim.keymap.set("n", "<Leader>dr", function()
         dap.continue()
       end, { desc = "Run Debugger" })
+       vim.keymap.set("n", "<leader>dm", function()
+    local addr = vim.fn.input("Memory address: ")
+    local cmd = "memory read --format x --size 4 --count 4 " .. addr
+    require("dap").repl.open()
+    require("dap").repl.send(cmd)
+  end, { desc = "Inspect Memory at Address" })
     end,
   },
 }
