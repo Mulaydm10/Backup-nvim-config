@@ -7,19 +7,18 @@ return {
   },
   {
     "williamboman/mason-lspconfig.nvim",
-   opts = {
-      auto_install = true , 
-    }, 
+    opts = {
+      auto_install = true,
+    },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "ts_ls", "clangd","gopls", },
+        ensure_installed = { "lua_ls", "ts_ls", "clangd", "gopls", "rust_analyzer" },
       })
     end,
   },
   {
     "neovim/nvim-lspconfig",
     config = function()
-
       vim.diagnostic.config({
         virtual_text = true,
         signs = true,
@@ -52,32 +51,61 @@ return {
       })
 
       -- C/C++
-     lspconfig.clangd.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  root_dir = require("lspconfig.util").root_pattern("compile_commands.json", ".git"),
-})
+      lspconfig.clangd.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        root_dir = util.root_pattern("compile_commands.json", ".git"),
+      })
+
+      -- Go
       lspconfig.gopls.setup({
- 
-      on_attach = on_attach,
-      capabilities = capabilities,
-      cmd ={"gopls"},
-      filetypes = {"go","gomod","gowork","gotmpl"},
-      root_dir = util.root_pattern("go.work","go.mod",".git"),
-      settings = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { "gopls" },
+        filetypes = { "go", "gomod", "gowork", "gotmpl" },
+        root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+        settings = {
           gopls = {
-            completeUnimported = true , 
+            completeUnimported = true,
             usePlaceholders = true,
             analyses = {
-              unusedparams = true , 
+              unusedparams = true,
             }
           }
         }
       })
 
-
-
-
+      -- 🦀 DO NOT add `lspconfig.rust_analyzer.setup({ ... })` here
+    end,
+  },
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^6",
+    lazy = false,
+    config = function()
+      vim.g.rustaceanvim = {
+        server = {
+          on_attach = function(client, bufnr)
+            local opts = { noremap = true, silent = true, buffer = bufnr }
+            vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+            vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+          end,
+          default_settings = {
+            ["rust-analyzer"] = {
+              cargo = { allFeatures = true },
+              checkOnSave = {
+                command = "clippy",
+              },
+              inlayHints = {
+                chainingHints = { enable = true },
+                parameterHints = { enable = true },
+                typeHints = { enable = true },
+              },
+            },
+          },
+        },
+      }
     end,
   },
   {
