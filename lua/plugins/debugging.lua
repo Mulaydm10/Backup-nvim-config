@@ -16,10 +16,19 @@ return {
   },
 
   {
+    "mfussenegger/nvim-dap-python",
+    ft = "python",
+    config = function()
+      local path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+      require("dap-python").setup(path)
+    end,
+  },
+
+  {
     "jay-babu/mason-nvim-dap.nvim",
     event = "VeryLazy",
     opts = {
-      handlers = {}
+      handlers = {},
     },
     config = function()
       local dap_ok, dap = pcall(require, "dap")
@@ -59,52 +68,51 @@ return {
       }
 
       dap.configurations.c = dap.configurations.cpp
+      dap.configurations.rust = dap.configurations.cpp
 
       -- Keymaps
-      vim.keymap.set("n", "<Leader>dt", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
-      vim.keymap.set("n", "<Leader>dc", dap.continue, { desc = "Start/Continue Debugger" })
-  vim.keymap.set("n", "<leader>dus", function()
-  local widgets = require('dap.ui.widgets')
-  local sidebar = widgets.sidebar(widgets.scopes)
-  sidebar.open()
-end, { desc = "Open debugging sidebar" })
-    
+      local map = vim.keymap.set
+      map("n", "<Leader>dt", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
+      map("n", "<Leader>dc", dap.continue, { desc = "Start/Continue Debugger" })
 
+      map("n", "<leader>dus", function()
+        local widgets = require("dap.ui.widgets")
+        local sidebar = widgets.sidebar(widgets.scopes)
+        sidebar.open()
+      end, { desc = "Open Debug Sidebar" })
 
-      vim.keymap.set("n", "<Leader>dr", dap.continue, { desc = "Run Debugger" })
+      map("n", "<Leader>dr", dap.continue, { desc = "Run Debugger" })
 
-      vim.keymap.set("n", "<leader>dv", function()
+      map("n", "<leader>dv", function()
         local var = vim.fn.input("Variable name: ")
         local cmd = "p &" .. var
         require("dap").repl.open()
         require("dap").repl.send(cmd)
       end, { desc = "Print Address of Variable" })
 
-    vim.keymap.set("n", "<leader>dgt", function()
-      require("dap-go").debug_test()
-    end, { desc = "Debug go test" })
+      map("n", "<leader>dgt", function()
+        require("dap-go").debug_test()
+      end, { desc = "Debug Go Test" })
 
-    vim.keymap.set("n", "<leader>dgl", function()
-      require("dap-go").debug_last()
-    end, { desc = "Debug last go test" })
+      map("n", "<leader>dgl", function()
+        require("dap-go").debug_last()
+      end, { desc = "Debug Last Go Test" })
 
-      vim.keymap.set("n", "<leader>dm", function()
+      map("n", "<leader>dm", function()
         local addr = vim.fn.input("Memory address: ")
         if addr == "" then return end
-
-        local dap = require("dap")
-        local repl = require("dap.repl")
 
         if not dap.session() then
           vim.notify("No active debug session", vim.log.levels.WARN)
           return
         end
 
+        local repl = require("dap.repl")
         repl.open()
         local cmd = "memory read --format x --size 4 --count 4 " .. addr
         repl.execute(cmd)
         vim.cmd("wincmd p")
-      end, { desc = "Inspect Memory at Address" })
+      end, { desc = "Inspect Memory" })
     end,
   },
 }

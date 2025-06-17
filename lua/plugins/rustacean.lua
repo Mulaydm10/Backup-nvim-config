@@ -17,9 +17,7 @@ return
         default_settings = {
           ["rust-analyzer"] = {
             cargo = { allFeatures = true },
-            checkOnSave = {
-              command = "clippy",
-            },
+            checkOnSave = "clippy",
             inlayHints = {
               chainingHints = { enable = true },
               parameterHints = { enable = true },
