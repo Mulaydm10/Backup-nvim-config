@@ -17,12 +17,12 @@ return {
         null_ls.builtins.formatting.gofmt,
         null_ls.builtins.formatting.goimports,
         null_ls.builtins.formatting.golines,
+        null_ls.builtins.formatting.ruff,
 
         -- Diagnostics
         null_ls.builtins.diagnostics.mypy,
         null_ls.builtins.diagnostics.ruff,
         null_ls.builtins.diagnostics.eslint_d,
-        null_ls.builtins.diagnostics.clang_check,
         null_ls.builtins.diagnostics.cpplint,
         null_ls.builtins.diagnostics.cppcheck.with({
           args = {
@@ -58,4 +58,3 @@ return {
     end, { desc = "Manual format" })
   end,
 }
-

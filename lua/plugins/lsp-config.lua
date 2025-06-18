@@ -14,12 +14,11 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "lua_ls",
-          "ts_ls",  -- ⛔️ FIX: Should be "tsserver" not "ts_ls"
+          "ts_ls", -- ⛔️ FIX: Should be "tsserver" not "ts_ls"
           "clangd",
           "gopls",
           "rust_analyzer",
           "pyright",
-          "mypy",
           "ruff",
         },
       })
@@ -148,4 +147,3 @@ return {
     end,
   },
 }
-
