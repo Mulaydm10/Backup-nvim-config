@@ -33,14 +33,24 @@ return {
     config = function()
       local dap_ok, dap = pcall(require, "dap")
       local dapui_ok, dapui = pcall(require, "dapui")
-      if not dap_ok or not dapui_ok then return end
+      if not dap_ok or not dapui_ok then
+        return
+      end
 
       dapui.setup()
 
-      dap.listeners.before.attach.dapui_config = function() dapui.open() end
-      dap.listeners.before.launch.dapui_config = function() dapui.open() end
-      dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
-      dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
 
       dap.adapters.lldb = {
         type = "server",
@@ -51,6 +61,28 @@ return {
         },
         name = "codelldb",
       }
+      -- PWA Node Adapter for JavaScript & TypeScript
+      dap.adapters["pwa-node"] = {
+        type = "server",
+        host = "127.0.0.1",
+        port = 8123,
+        executable = {
+          command = "js-debug-adapter", -- Make sure this is in your PATH or adjust accordingly
+        },
+      }
+
+      for _, language in ipairs({ "typescript", "javascript" }) do
+        dap.configurations[language] = {
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+            runtimeExecutable = "node",
+          },
+        }
+      end
 
       dap.configurations.cpp = {
         {
@@ -58,9 +90,9 @@ return {
           type = "lldb",
           request = "launch",
           program = function()
-            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
           end,
-          cwd = '${workspaceFolder}',
+          cwd = "${workspaceFolder}",
           stopOnEntry = false,
           args = {},
           runInTerminal = false,
@@ -100,7 +132,9 @@ return {
 
       map("n", "<leader>dm", function()
         local addr = vim.fn.input("Memory address: ")
-        if addr == "" then return end
+        if addr == "" then
+          return
+        end
 
         if not dap.session() then
           vim.notify("No active debug session", vim.log.levels.WARN)
@@ -116,4 +150,3 @@ return {
     end,
   },
 }
-

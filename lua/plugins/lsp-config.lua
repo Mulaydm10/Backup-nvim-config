@@ -14,12 +14,11 @@ return {
       require("mason-lspconfig").setup({
         ensure_installed = {
           "lua_ls",
-          "ts_ls", -- ⛔️ FIX: Should be "tsserver" not "ts_ls"
+          "ts_ls",
           "clangd",
           "gopls",
           "rust_analyzer",
           "pyright",
-          "ruff",
         },
       })
     end,
@@ -39,23 +38,45 @@ return {
         severity_sort = true,
       })
 
+      local function organize_imports()
+        local params = {
+          command = "_typescript.organizeImports",
+          arguments = { vim.api.nvim_buf_get_name(0) },
+        }
+        vim.lsp.buf.execute_command(params)
+      end
+
       local on_attach = function(_, bufnr)
         local opts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+
+        vim.api.nvim_buf_create_user_command(bufnr, "OrganizeImports", organize_imports, {
+          desc = "Organize Imports",
+        })
       end
 
       -- Lua
       lspconfig.lua_ls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        init_options = {
+          preferences = {
+            disableSuggestions = true,
+          },
+        },
       })
 
       -- TypeScript
       lspconfig.ts_ls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
+        init_options = {
+          preferences = {
+            disableSuggestions = true,
+          },
+        },
       })
 
       -- C/C++
@@ -89,8 +110,6 @@ return {
         capabilities = capabilities,
         filetypes = { "python" },
       })
-
-      -- 🦀 Rust is handled by rustaceanvim, do not add rust_analyzer here
     end,
   },
   {
